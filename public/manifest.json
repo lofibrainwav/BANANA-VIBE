@@ -1,0 +1,33 @@
+{
+  "name": "Banana Vibe",
+  "short_name": "BananaVibe",
+  "description": "Your personal vibe management platform",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fef9c3",
+  "theme_color": "#fef9c3",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "New Vibe",
+      "short_name": "New",
+      "description": "Create a new vibe",
+      "url": "/vibe/new",
+      "icons": [{ "src": "/icon-96x96.png", "sizes": "96x96" }]
+    }
+  ]
+} 

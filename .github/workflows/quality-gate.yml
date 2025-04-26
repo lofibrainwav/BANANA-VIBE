@@ -1,0 +1,79 @@
+name: Quality Gate
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  quality-gate:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Run test coverage
+      run: npm run test:coverage
+      env:
+        DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test_db
+    
+    - name: Check test coverage
+      uses: codecov/codecov-action@v3
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        fail_ci_if_error: true
+        minimum_coverage: 80
+    
+    - name: Run security audit
+      run: npm audit
+      continue-on-error: false
+    
+    - name: Run type checking
+      run: npm run type-check
+    
+    - name: Check bundle size
+      run: npm run analyze
+      env:
+        ANALYZE: true
+    
+    - name: Comment PR with quality report
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const fs = require('fs');
+          const coverage = JSON.parse(fs.readFileSync('./coverage/coverage-summary.json', 'utf8'));
+          const total = coverage.total;
+          
+          const message = `
+          ## Quality Gate Report
+          
+          ### Test Coverage
+          - Lines: ${total.lines.pct}%
+          - Statements: ${total.statements.pct}%
+          - Functions: ${total.functions.pct}%
+          - Branches: ${total.branches.pct}%
+          
+          ### Bundle Analysis
+          - Check the build artifacts for detailed bundle analysis
+          
+          ### Security
+          - Security audit passed
+          
+          ### Type Checking
+          - Type checking passed
+          `;
+          
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: message
+          }); 

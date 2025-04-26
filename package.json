@@ -1,0 +1,79 @@
+{
+  "name": "banana-vibe",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "format": "prettier --write .",
+    "type-check": "tsc --noEmit",
+    "prepare": "husky install",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:e2e": "cypress run",
+    "test:e2e:dev": "cypress open",
+    "test:ci": "jest --ci --coverage && cypress run",
+    "db:test:setup": "prisma db push --schema=./prisma/schema.test.prisma",
+    "db:test:reset": "prisma db push --force-reset --schema=./prisma/schema.test.prisma",
+    "db:migrate": "prisma migrate deploy",
+    "db:seed": "prisma db seed",
+    "vercel-build": "prisma generate && prisma migrate deploy && next build",
+    "analyze": "ANALYZE=true next build",
+    "lighthouse": "lhci autorun"
+  },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
+  "dependencies": {
+    "@heroicons/react": "^2.1.1",
+    "@prisma/client": "^5.0.0",
+    "@sentry/nextjs": "^9.14.0",
+    "autoprefixer": "^10.0.1",
+    "clsx": "^2.1.0",
+    "firebase": "^10.8.0",
+    "next": "14.1.0",
+    "next-auth": "^4.24.11",
+    "postcss": "^8",
+    "react": "^18",
+    "react-dom": "^18",
+    "swr": "^2.3.3",
+    "tailwind-merge": "^2.2.1",
+    "tailwindcss": "^3.4.1"
+  },
+  "devDependencies": {
+    "@lhci/cli": "^0.14.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "@typescript-eslint/eslint-plugin": "^7.1.0",
+    "@typescript-eslint/parser": "^7.1.0",
+    "cypress": "^13.2.0",
+    "eslint": "^8",
+    "eslint-config-next": "14.1.0",
+    "husky": "^9.0.11",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "lint-staged": "^15.2.2",
+    "prettier": "^3.2.5",
+    "prettier-plugin-tailwindcss": "^0.5.11",
+    "prisma": "^5.0.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5",
+    "webpack-bundle-analyzer": "^4.10.2"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md}": [
+      "prettier --write"
+    ]
+  }
+}
